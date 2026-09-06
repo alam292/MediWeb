@@ -1,0 +1,93 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model User {
+  id        String    @id @default(cuid())
+  email     String    @unique
+  name      String
+  password  String    @default("demo123")
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  websites  Website[]
+}
+
+model Website {
+  id          String          @id @default(cuid())
+  name        String
+  slug        String          @unique
+  status      String          @default("LIVE") // LIVE, DRAFT
+  template    String          @default("modern-medical") // modern-medical, professional-doctor, premium-clinic
+  userId      String
+  user        User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  profile     WebsiteProfile?
+  services    Service[]
+  gallery     GalleryImage[]
+  design      WebsiteDesign?
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+}
+
+model WebsiteProfile {
+  id              String   @id @default(cuid())
+  websiteId       String   @unique
+  website         Website  @relation(fields: [websiteId], references: [id], onDelete: Cascade)
+  doctorName      String
+  title           String   // e.g. "Cardiologist", "Dental Surgeon"
+  specialization  String   // e.g. "Interventional Cardiology"
+  qualification   String   // e.g. "MBBS, MD (Cardiology), FACC"
+  experience      String   // e.g. "12 Years Experience"
+  about           String   // Detailed bio
+  phone           String
+  email           String
+  whatsapp        String
+  address         String
+  profileImage    String?  // URL or base64 data URI
+  logoImage       String?  // URL or base64 data URI
+  coverImage      String?  // URL or base64 data URI
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+model Service {
+  id          String   @id @default(cuid())
+  websiteId   String
+  website     Website  @relation(fields: [websiteId], references: [id], onDelete: Cascade)
+  name        String
+  description String
+  price       String
+  duration    String
+  icon        String   @default("Stethoscope")
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model GalleryImage {
+  id          String   @id @default(cuid())
+  websiteId   String
+  website     Website  @relation(fields: [websiteId], references: [id], onDelete: Cascade)
+  url         String
+  caption     String?
+  createdAt   DateTime @default(now())
+}
+
+model WebsiteDesign {
+  id              String   @id @default(cuid())
+  websiteId       String   @unique
+  website         Website  @relation(fields: [websiteId], references: [id], onDelete: Cascade)
+  primaryColor    String   @default("#0d9488")
+  secondaryColor  String   @default("#0284c7")
+  backgroundColor String   @default("#ffffff")
+  textColor       String   @default("#0f172a")
+  fontFamily      String   @default("Modern") // Modern, Professional, Minimal
+  buttonStyle     String   @default("Rounded") // Rounded, Square, Pill
+  headerStyle     String   @default("Modern") // Classic, Modern, Centered
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
