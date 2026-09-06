@@ -39,7 +39,7 @@ export default function ManageWebsitePage() {
   const websiteId = params.id as string;
 
   const [activeTab, setActiveTab] = useState<
-    "overview" | "details" | "services" | "appointments" | "design" | "images" | "preview"
+    "overview" | "details" | "services" | "appointments" | "design" | "images" | "preview" | "mobile"
   >("overview");
 
   // Demo appointments data
@@ -328,6 +328,7 @@ export default function ManageWebsitePage() {
               { id: "appointments", label: "Appointments" },
               { id: "design", label: "Design" },
               { id: "images", label: "Images" },
+              { id: "mobile", label: "Mobile App" },
               { id: "preview", label: "Live Preview" },
             ] as const
           ).map((tab) => (
@@ -1001,6 +1002,46 @@ export default function ManageWebsitePage() {
               >
                 {saving ? "Saving..." : "Save Images"}
               </button>
+            </div>
+          </div>
+        )}
+
+        {/* TAB: MOBILE APP */}
+        {activeTab === "mobile" && (
+          <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-6">
+            <div>
+              <h2 className="text-xl font-black text-slate-900">Mobile App (PWA)</h2>
+              <p className="text-xs text-slate-500">Your website is instantly available as a mobile app. Patients can install it directly from the browser.</p>
+            </div>
+
+            <div className="p-5 rounded-2xl bg-teal-50 border border-teal-200 text-teal-900 text-sm">
+              <h3 className="font-bold text-base mb-2">How to install your App:</h3>
+              <ol className="list-decimal list-inside space-y-2 text-teal-800">
+                <li>Open your public website link on a mobile device.</li>
+                <li>Tap the browser menu (Chrome, Safari, etc.).</li>
+                <li>Select <strong>"Add to Home Screen"</strong> or <strong>"Install App"</strong>.</li>
+                <li>Your clinic's app will now appear on the device home screen!</li>
+              </ol>
+            </div>
+
+            <div className="flex items-center space-x-4 pt-4 border-t border-slate-100">
+              <div className="flex-1">
+                <label className="block text-xs font-bold text-slate-700 mb-1">Share Mobile App Link</label>
+                <div className="flex items-center space-x-2">
+                  <input
+                    type="text"
+                    readOnly
+                    value={publicUrl}
+                    className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-mono"
+                  />
+                  <button
+                    onClick={handleCopyLink}
+                    className="px-4 py-2 bg-slate-200 hover:bg-slate-300 text-slate-700 rounded-xl font-bold text-xs whitespace-nowrap"
+                  >
+                    {copied ? "Copied!" : "Copy Link"}
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
         )}

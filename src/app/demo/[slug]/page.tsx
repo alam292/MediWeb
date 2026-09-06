@@ -50,6 +50,13 @@ export async function generateMetadata({ params }: PageProps) {
   return {
     title: `${website.name} | ${website.profile?.title || "Professional Healthcare"}`,
     description: website.profile?.about || `Official website of ${website.name}.`,
+    manifest: `/demo/${params.slug}/manifest.json`,
+    themeColor: website.design?.primaryColor || "#0d9488",
+    appleWebApp: {
+      capable: true,
+      statusBarStyle: "default",
+      title: website.name,
+    },
   };
 }
 
