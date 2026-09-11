@@ -33,6 +33,7 @@ import {
 import { WebsiteData, ServiceData } from "@/lib/types";
 import WebsiteRenderer from "@/components/renderer/WebsiteRenderer";
 import MobileAppPreview from "@/components/renderer/MobileAppPreview";
+import APKGeneratorModal from "@/components/APKGeneratorModal";
 import { ICON_OPTIONS } from "@/components/renderer/IconHelper";
 import { slugify } from "@/lib/utils";
 
@@ -56,6 +57,7 @@ export default function CreateWebsiteWizardPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [createdWebsite, setCreatedWebsite] = useState<WebsiteData | null>(null);
   const [copiedLink, setCopiedLink] = useState(false);
+  const [showAPKModal, setShowAPKModal] = useState(false);
 
   // Live state that drives the live preview synchronously
   const [websiteData, setWebsiteData] = useState<WebsiteData>({
@@ -309,24 +311,43 @@ export default function CreateWebsiteWizardPage() {
             </div>
           </div>
 
-          <div className="flex flex-col sm:flex-row gap-3 pt-2">
-            <Link
-              href={`/demo/${createdWebsite.slug}`}
-              target="_blank"
-              className="flex-1 py-3.5 bg-teal-600 hover:bg-teal-500 text-white font-bold text-sm rounded-xl shadow-lg shadow-teal-600/20 flex items-center justify-center space-x-2 transition-all"
+          <div className="space-y-3 pt-2">
+            <button
+              onClick={() => setShowAPKModal(true)}
+              className="w-full py-3.5 bg-gradient-to-r from-teal-600 via-emerald-600 to-teal-700 hover:opacity-95 active:scale-[0.99] text-white font-extrabold text-sm rounded-xl shadow-lg shadow-emerald-600/25 flex items-center justify-center space-x-2.5 transition-all group"
             >
-              <span>Open Website</span>
-              <ExternalLink className="w-4 h-4" />
-            </Link>
+              <Smartphone className="w-4 h-4 text-emerald-200 group-hover:scale-110 transition-transform" />
+              <span>Generate Android APK (.apk)</span>
+              <span className="px-2 py-0.5 rounded-full text-[10px] bg-white/20 text-white font-bold">
+                Installer
+              </span>
+            </button>
 
-            <Link
-              href={`/dashboard/websites/${createdWebsite.id}`}
-              className="flex-1 py-3.5 bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-sm rounded-xl flex items-center justify-center space-x-2 transition-all"
-            >
-              <span>Manage Website</span>
-              <ChevronRight className="w-4 h-4" />
-            </Link>
+            <div className="flex flex-col sm:flex-row gap-3">
+              <Link
+                href={`/demo/${createdWebsite.slug}`}
+                target="_blank"
+                className="flex-1 py-3.5 bg-teal-600 hover:bg-teal-500 text-white font-bold text-sm rounded-xl shadow-md shadow-teal-600/20 flex items-center justify-center space-x-2 transition-all"
+              >
+                <span>Open Website</span>
+                <ExternalLink className="w-4 h-4" />
+              </Link>
+
+              <Link
+                href={`/dashboard/websites/${createdWebsite.id}`}
+                className="flex-1 py-3.5 bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-sm rounded-xl flex items-center justify-center space-x-2 transition-all"
+              >
+                <span>Manage Website</span>
+                <ChevronRight className="w-4 h-4" />
+              </Link>
+            </div>
           </div>
+
+          <APKGeneratorModal
+            isOpen={showAPKModal}
+            onClose={() => setShowAPKModal(false)}
+            website={createdWebsite}
+          />
 
           <div>
             <button

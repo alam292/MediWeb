@@ -29,10 +29,13 @@ import {
   Mail,
   LogOut,
   Globe,
+  Download,
+  Cpu,
 } from "lucide-react";
 import { WebsiteData, ServiceData } from "@/lib/types";
 import WebsiteRenderer from "@/components/renderer/WebsiteRenderer";
 import MobileAppPreview from "@/components/renderer/MobileAppPreview";
+import APKGeneratorModal from "@/components/APKGeneratorModal";
 import { ICON_OPTIONS } from "@/components/renderer/IconHelper";
 
 export default function ManageWebsitePage() {
@@ -107,6 +110,7 @@ export default function ManageWebsitePage() {
   const [saving, setSaving] = useState(false);
   const [savedSuccess, setSavedSuccess] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [showAPKModal, setShowAPKModal] = useState(false);
   const [previewType, setPreviewType] = useState<"website" | "mobile_app">("website");
   const [viewport, setViewport] = useState<"desktop" | "tablet" | "mobile">("desktop");
   const [appDevice, setAppDevice] = useState<"ios" | "android">("ios");
@@ -1072,6 +1076,51 @@ export default function ManageWebsitePage() {
                     </li>
                   </ul>
                 </div>
+
+                {/* Standalone APK Generator Box */}
+                <div className="p-5 rounded-2xl bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white space-y-4 shadow-xl border border-slate-700">
+                  <div className="flex items-start justify-between">
+                    <div className="flex items-center space-x-3">
+                      <div className="w-10 h-10 rounded-xl bg-teal-500/20 text-teal-400 border border-teal-500/30 flex items-center justify-center">
+                        <Smartphone className="w-5 h-5" />
+                      </div>
+                      <div>
+                        <h4 className="text-sm font-extrabold text-white">Standalone Android APK (.apk)</h4>
+                        <p className="text-[11px] text-slate-300">Package & compile your clinic into a native installable Android app</p>
+                      </div>
+                    </div>
+                    <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
+                      Android 14 Ready
+                    </span>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-2 text-[11px] text-slate-300 py-1">
+                    <div className="flex items-center space-x-1.5">
+                      <Check className="w-3.5 h-3.5 text-teal-400 flex-shrink-0" />
+                      <span>Signed Release Keystore</span>
+                    </div>
+                    <div className="flex items-center space-x-1.5">
+                      <Check className="w-3.5 h-3.5 text-teal-400 flex-shrink-0" />
+                      <span>Offline Patient Telehealth</span>
+                    </div>
+                    <div className="flex items-center space-x-1.5">
+                      <Check className="w-3.5 h-3.5 text-teal-400 flex-shrink-0" />
+                      <span>QR Mobile Instant Scan</span>
+                    </div>
+                    <div className="flex items-center space-x-1.5">
+                      <Check className="w-3.5 h-3.5 text-teal-400 flex-shrink-0" />
+                      <span>Custom Package Identifier</span>
+                    </div>
+                  </div>
+
+                  <button
+                    onClick={() => setShowAPKModal(true)}
+                    className="w-full py-3 bg-gradient-to-r from-teal-500 to-emerald-500 hover:opacity-95 active:scale-[0.99] text-white font-extrabold text-xs rounded-xl shadow-lg shadow-teal-500/25 flex items-center justify-center space-x-2 transition-all"
+                  >
+                    <Download className="w-4 h-4" />
+                    <span>Generate & Download Android APK</span>
+                  </button>
+                </div>
               </div>
 
               {/* Right Column: Live Interactive Mobile App Preview */}
@@ -1194,6 +1243,14 @@ export default function ManageWebsitePage() {
           </div>
         )}
       </main>
+
+      {website && (
+        <APKGeneratorModal
+          isOpen={showAPKModal}
+          onClose={() => setShowAPKModal(false)}
+          website={website}
+        />
+      )}
     </div>
   );
 }
