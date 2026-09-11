@@ -39,3 +39,7 @@ android/app/build/
 android/build/
 *.apk
 
+# typescript
+*.tsbuildinfo
+next-env.d.ts
+
