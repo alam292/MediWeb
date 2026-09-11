@@ -151,9 +151,67 @@ Open [http://localhost:3000](http://localhost:3000) in your browser to view the 
 | Command | Description |
 | :--- | :--- |
 | `npm run dev` | Starts the development server at `localhost:3000` |
-| `npm run build` | Builds the optimized production application |
+| `npm run build` | Builds the optimized production Next.js application |
 | `npm run start` | Runs the compiled production build |
 | `npm run seed` | Seeds the database with default doctor websites and demo data |
+| `npm run cap:sync` | Synchronizes Next.js static assets with the Android native project |
+| `npm run cap:open` | Opens the native Android project in Android Studio |
+| `npm run build:apk` | Compiles a standalone native debug APK (`app-debug.apk`) via Gradle |
+
+---
+
+## 📱 Live Dual Preview (Website + Mobile App)
+
+MediWeb provides simultaneous real-time live preview as the doctor fills out the form:
+1. **Website Preview**: View responsive layouts in Desktop, Tablet, and Mobile viewports.
+2. **Mobile App Preview**: An interactive native iOS & Android smartphone mockup with hardware buttons, dynamic island/punch-hole camera, status bar, and 5 interactive tabs:
+   - **Home**: Doctor hero card, quick actions, telehealth banner, and treatment highlights.
+   - **Services**: Full treatments catalog with live pricing, duration, and custom medical icons.
+   - **Book Appointment**: Functional patient booking simulation with slot picker and confirmation.
+   - **Doctor Bio**: Specializations, credentials, experience, and clinic photo tour.
+   - **Contact**: Direct tap-to-call, WhatsApp messaging, and clinic address.
+3. **Dual View**: Side-by-side display of both the Website and Mobile Application simultaneously.
+
+---
+
+## 📦 Generating & Installing the Android APK
+
+### Option A: 1-Click In-Browser APK Builder
+1. Complete the doctor website form in the dashboard.
+2. Click **"Generate Android APK (.apk)"**.
+3. Watch the real-time compilation console progress.
+4. Once completed:
+   - Click **Download Android APK** to save the `.apk` package to your computer or phone.
+   - Or toggle **QR Code: Direct APK** and scan with any Android phone camera to download directly.
+
+### Option B: Local CLI Gradle Compilation
+You can compile the native APK on your machine using Gradle:
+
+```bash
+# 1. Build and sync Next.js assets to Android
+npm run build
+npm run cap:sync
+
+# 2. Compile signed debug APK
+npm run build:apk
+```
+
+The compiled APK will be generated at:
+```text
+android/app/build/outputs/apk/debug/app-debug.apk
+```
+
+### Option C: Direct USB Installation via ADB
+To install the APK directly to a connected Android smartphone:
+
+```bash
+adb install -r android/app/build/outputs/apk/debug/app-debug.apk
+```
+
+### How to Install the `.apk` on Android Devices:
+1. **Download APK**: Download the `.apk` file or scan the QR code with your mobile camera.
+2. **Allow Installation**: Tap the downloaded file in your Notification Center or Downloads folder. If prompted, select **Settings** -> enable **"Allow from this source"** (Unknown Sources).
+3. **Install & Launch**: Tap **Install**. The clinic app icon will appear immediately on your home screen!
 
 ---
 

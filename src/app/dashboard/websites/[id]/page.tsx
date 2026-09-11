@@ -31,6 +31,7 @@ import {
   Globe,
   Download,
   Cpu,
+  Share2,
 } from "lucide-react";
 import { WebsiteData, ServiceData } from "@/lib/types";
 import WebsiteRenderer from "@/components/renderer/WebsiteRenderer";
@@ -111,7 +112,7 @@ export default function ManageWebsitePage() {
   const [savedSuccess, setSavedSuccess] = useState(false);
   const [copied, setCopied] = useState(false);
   const [showAPKModal, setShowAPKModal] = useState(false);
-  const [previewType, setPreviewType] = useState<"website" | "mobile_app">("website");
+  const [previewType, setPreviewType] = useState<"website" | "mobile_app" | "dual">("website");
   const [viewport, setViewport] = useState<"desktop" | "tablet" | "mobile">("desktop");
   const [appDevice, setAppDevice] = useState<"ios" | "android">("ios");
 
@@ -1113,13 +1114,23 @@ export default function ManageWebsitePage() {
                     </div>
                   </div>
 
-                  <button
-                    onClick={() => setShowAPKModal(true)}
-                    className="w-full py-3 bg-gradient-to-r from-teal-500 to-emerald-500 hover:opacity-95 active:scale-[0.99] text-white font-extrabold text-xs rounded-xl shadow-lg shadow-teal-500/25 flex items-center justify-center space-x-2 transition-all"
-                  >
-                    <Download className="w-4 h-4" />
-                    <span>Generate & Download Android APK</span>
-                  </button>
+                  <div className="flex gap-2">
+                    <button
+                      onClick={() => setShowAPKModal(true)}
+                      className="flex-1 py-3 bg-gradient-to-r from-teal-500 to-emerald-500 hover:opacity-95 active:scale-[0.99] text-white font-extrabold text-xs rounded-xl shadow-lg shadow-teal-500/25 flex items-center justify-center space-x-2 transition-all"
+                    >
+                      <Download className="w-4 h-4" />
+                      <span>Generate & Download APK</span>
+                    </button>
+                    <button
+                      onClick={() => setShowAPKModal(true)}
+                      className="px-4 py-3 bg-slate-800 hover:bg-slate-700 text-teal-300 font-extrabold text-xs rounded-xl border border-slate-700 flex items-center justify-center space-x-1.5 transition-all shadow-md"
+                      title="Share APK with Patients"
+                    >
+                      <Share2 className="w-4 h-4" />
+                      <span>Share APK</span>
+                    </button>
+                  </div>
                 </div>
               </div>
 
@@ -1165,7 +1176,7 @@ export default function ManageWebsitePage() {
                     }`}
                   >
                     <Globe className="w-3.5 h-3.5 text-teal-600" />
-                    <span>Website Preview</span>
+                    <span>Website</span>
                   </button>
                   <button
                     onClick={() => setPreviewType("mobile_app")}
@@ -1174,8 +1185,22 @@ export default function ManageWebsitePage() {
                     }`}
                   >
                     <Smartphone className="w-3.5 h-3.5 text-teal-600" />
-                    <span>Mobile App Preview</span>
+                    <span>Mobile App</span>
                   </button>
+                  <button
+                    onClick={() => setPreviewType("dual")}
+                    className={`px-3 py-1.5 rounded-lg text-xs font-bold flex items-center space-x-1.5 transition-all ${
+                      previewType === "dual" ? "bg-white text-teal-700 shadow-sm" : "text-slate-500"
+                    }`}
+                  >
+                    <Layers className="w-3.5 h-3.5 text-teal-600" />
+                    <span>Dual View</span>
+                  </button>
+                </div>
+
+                <div className="hidden sm:flex items-center space-x-1.5 px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 text-[10px] font-black">
+                  <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                  <span>LIVE SYNC ACTIVE</span>
                 </div>
 
                 {previewType === "website" && (
@@ -1221,7 +1246,51 @@ export default function ManageWebsitePage() {
               </Link>
             </div>
 
-            {previewType === "website" ? (
+            {previewType === "dual" ? (
+              <div className="w-full flex flex-col 2xl:flex-row gap-6 items-start justify-center">
+                {/* Left: Website View */}
+                <div className="flex-1 w-full max-w-2xl bg-white rounded-3xl shadow-2xl overflow-hidden border-4 border-slate-300 flex flex-col">
+                  <div className="bg-slate-100 border-b border-slate-200 px-4 py-2.5 flex items-center justify-between">
+                    <div className="flex space-x-1.5">
+                      <div className="w-2.5 h-2.5 rounded-full bg-rose-400" />
+                      <div className="w-2.5 h-2.5 rounded-full bg-amber-400" />
+                      <div className="w-2.5 h-2.5 rounded-full bg-emerald-400" />
+                    </div>
+                    <span className="text-[11px] font-bold text-slate-700 flex items-center space-x-1">
+                      <Globe className="w-3.5 h-3.5 text-teal-600" />
+                      <span>Website Live View</span>
+                    </span>
+                    <div className="w-6" />
+                  </div>
+                  <div className="flex-1 overflow-y-auto max-h-[680px]">
+                    <WebsiteRenderer website={website} isIframe />
+                  </div>
+                </div>
+
+                {/* Right: Mobile App Mockup */}
+                <div className="flex-shrink-0 w-full 2xl:w-auto flex flex-col items-center">
+                  <div className="mb-2 px-3 py-1 rounded-xl bg-white border border-slate-200 shadow-sm flex items-center space-x-2 text-[11px] font-bold text-slate-700">
+                    <Smartphone className="w-3.5 h-3.5 text-teal-600" />
+                    <span>Native App Mockup</span>
+                    <div className="flex items-center space-x-1 bg-slate-100 p-0.5 rounded-lg text-[10px]">
+                      <button
+                        onClick={() => setAppDevice("ios")}
+                        className={`px-2 py-0.5 rounded ${appDevice === "ios" ? "bg-teal-600 text-white" : "text-slate-500"}`}
+                      >
+                        iOS
+                      </button>
+                      <button
+                        onClick={() => setAppDevice("android")}
+                        className={`px-2 py-0.5 rounded ${appDevice === "android" ? "bg-teal-600 text-white" : "text-slate-500"}`}
+                      >
+                        Android
+                      </button>
+                    </div>
+                  </div>
+                  <MobileAppPreview website={website} deviceType={appDevice} />
+                </div>
+              </div>
+            ) : previewType === "website" ? (
               <div className="flex justify-center">
                 <div
                   className={`bg-white rounded-3xl shadow-2xl overflow-hidden border-4 border-slate-300 transition-all ${

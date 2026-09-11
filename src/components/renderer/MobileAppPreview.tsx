@@ -50,6 +50,9 @@ export default function MobileAppPreview({
   const primaryColor = website.design?.primaryColor || "#0d9488";
   const secondaryColor = website.design?.secondaryColor || "#0284c7";
   const doctor = website.profile;
+  const doctorPhoto =
+    doctor?.profileImage ||
+    "https://images.unsplash.com/photo-1622253692010-333f2da6031d?q=80&w=800&auto=format&fit=crop";
 
   const handleQuickBook = (serviceId?: string) => {
     if (serviceId) setSelectedServiceId(serviceId);
@@ -425,8 +428,8 @@ export default function MobileAppPreview({
                       </label>
                       <div className="flex items-center space-x-2">
                         <img
-                          src={doctor?.profileImage || ""}
-                          alt=""
+                          src={doctorPhoto}
+                          alt={doctor?.doctorName || "Doctor"}
                           className="w-7 h-7 rounded-full object-cover border border-slate-200"
                         />
                         <span className="font-bold text-slate-900 text-xs">{doctor?.doctorName}</span>
@@ -527,8 +530,8 @@ export default function MobileAppPreview({
 
                 <div className="bg-white p-4 rounded-2xl border border-slate-100 text-center space-y-2 shadow-sm">
                   <img
-                    src={doctor?.profileImage || ""}
-                    alt={doctor?.doctorName}
+                    src={doctorPhoto}
+                    alt={doctor?.doctorName || "Doctor"}
                     className="w-20 h-20 rounded-2xl object-cover mx-auto border-2 border-teal-500 shadow-md"
                   />
                   <h4 className="text-sm font-black text-slate-900">{doctor?.doctorName}</h4>

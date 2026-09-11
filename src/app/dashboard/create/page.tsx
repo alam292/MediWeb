@@ -29,6 +29,7 @@ import {
   LogOut,
   Globe,
   AppWindow,
+  Share2,
 } from "lucide-react";
 import { WebsiteData, ServiceData } from "@/lib/types";
 import WebsiteRenderer from "@/components/renderer/WebsiteRenderer";
@@ -51,7 +52,7 @@ export default function CreateWebsiteWizardPage() {
 
   // Wizard Step
   const [currentStep, setCurrentStep] = useState(1);
-  const [previewType, setPreviewType] = useState<"website" | "mobile_app">("website");
+  const [previewType, setPreviewType] = useState<"website" | "mobile_app" | "dual">("website");
   const [viewport, setViewport] = useState<"desktop" | "tablet" | "mobile">("desktop");
   const [appDevice, setAppDevice] = useState<"ios" | "android">("ios");
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -312,16 +313,26 @@ export default function CreateWebsiteWizardPage() {
           </div>
 
           <div className="space-y-3 pt-2">
-            <button
-              onClick={() => setShowAPKModal(true)}
-              className="w-full py-3.5 bg-gradient-to-r from-teal-600 via-emerald-600 to-teal-700 hover:opacity-95 active:scale-[0.99] text-white font-extrabold text-sm rounded-xl shadow-lg shadow-emerald-600/25 flex items-center justify-center space-x-2.5 transition-all group"
-            >
-              <Smartphone className="w-4 h-4 text-emerald-200 group-hover:scale-110 transition-transform" />
-              <span>Generate Android APK (.apk)</span>
-              <span className="px-2 py-0.5 rounded-full text-[10px] bg-white/20 text-white font-bold">
-                Installer
-              </span>
-            </button>
+            <div className="flex gap-2">
+              <button
+                onClick={() => setShowAPKModal(true)}
+                className="flex-1 py-3.5 bg-gradient-to-r from-teal-600 via-emerald-600 to-teal-700 hover:opacity-95 active:scale-[0.99] text-white font-extrabold text-sm rounded-xl shadow-lg shadow-emerald-600/25 flex items-center justify-center space-x-2.5 transition-all group"
+              >
+                <Smartphone className="w-4 h-4 text-emerald-200 group-hover:scale-110 transition-transform" />
+                <span>Generate Android APK</span>
+                <span className="px-2 py-0.5 rounded-full text-[10px] bg-white/20 text-white font-bold">
+                  Installer
+                </span>
+              </button>
+              <button
+                onClick={() => setShowAPKModal(true)}
+                className="px-4 py-3.5 bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-sm rounded-xl flex items-center justify-center space-x-2 transition-all"
+                title="Share APK"
+              >
+                <Share2 className="w-4 h-4 text-teal-600" />
+                <span className="hidden sm:inline">Share APK</span>
+              </button>
+            </div>
 
             <div className="flex flex-col sm:flex-row gap-3">
               <Link
@@ -420,6 +431,17 @@ export default function CreateWebsiteWizardPage() {
             >
               <Smartphone className="w-3.5 h-3.5" />
               <span>Mobile App</span>
+            </button>
+            <button
+              onClick={() => setPreviewType("dual")}
+              className={`px-3 py-1.5 rounded-lg text-xs font-bold flex items-center space-x-1.5 transition-all ${
+                previewType === "dual"
+                  ? "bg-white text-teal-700 shadow-sm"
+                  : "text-slate-500 hover:text-slate-800"
+              }`}
+            >
+              <Layers className="w-3.5 h-3.5 text-teal-600" />
+              <span>Dual View</span>
             </button>
           </div>
 
@@ -1279,7 +1301,7 @@ export default function CreateWebsiteWizardPage() {
         {/* RIGHT COLUMN: LIVE WEBSITE + MOBILE APP PREVIEW (7 cols on lg) */}
         <div className="lg:col-span-7 bg-slate-200/80 p-4 sm:p-6 flex flex-col items-center justify-start overflow-y-auto h-[calc(100vh-110px)]">
           {/* Header Switcher inside Preview Column */}
-          <div className="w-full flex flex-col sm:flex-row items-center justify-between gap-2 mb-4 bg-white/90 backdrop-blur-sm p-2 rounded-2xl border border-slate-200 shadow-sm">
+          <div className="w-full flex flex-col sm:flex-row items-center justify-between gap-2 mb-4 bg-white/90 backdrop-blur-sm p-2.5 rounded-2xl border border-slate-200 shadow-sm">
             <div className="flex items-center space-x-1 bg-slate-100 p-1 rounded-xl w-full sm:w-auto">
               <button
                 onClick={() => setPreviewType("website")}
@@ -1290,7 +1312,7 @@ export default function CreateWebsiteWizardPage() {
                 }`}
               >
                 <Globe className="w-3.5 h-3.5 text-teal-600" />
-                <span>Website Preview</span>
+                <span>Website</span>
               </button>
               <button
                 onClick={() => setPreviewType("mobile_app")}
@@ -1301,8 +1323,25 @@ export default function CreateWebsiteWizardPage() {
                 }`}
               >
                 <Smartphone className="w-3.5 h-3.5 text-teal-600" />
-                <span>Mobile App Preview</span>
+                <span>Mobile App</span>
               </button>
+              <button
+                onClick={() => setPreviewType("dual")}
+                className={`flex-1 sm:flex-initial px-3 py-1.5 rounded-lg text-xs font-bold flex items-center justify-center space-x-1.5 transition-all ${
+                  previewType === "dual"
+                    ? "bg-white text-teal-700 shadow-sm"
+                    : "text-slate-500 hover:text-slate-800"
+                }`}
+              >
+                <Layers className="w-3.5 h-3.5 text-teal-600" />
+                <span>Dual View</span>
+              </button>
+            </div>
+
+            {/* Live Synchronized Pill Badge */}
+            <div className="hidden sm:flex items-center space-x-1.5 px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 text-[10px] font-black tracking-wide">
+              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+              <span>LIVE SYNC ACTIVE</span>
             </div>
 
             {/* Sub-view switcher buttons */}
@@ -1371,7 +1410,52 @@ export default function CreateWebsiteWizardPage() {
           </div>
 
           {/* PREVIEW CONTAINER BODY */}
-          {previewType === "website" ? (
+          {previewType === "dual" ? (
+            /* Dual View: Website + Mobile App side-by-side */
+            <div className="w-full flex flex-col 2xl:flex-row gap-6 items-start justify-center">
+              {/* Left: Responsive Website Frame */}
+              <div className="flex-1 w-full max-w-2xl bg-white rounded-3xl shadow-2xl overflow-hidden border-4 border-slate-300 flex flex-col">
+                <div className="bg-slate-100 border-b border-slate-200 px-4 py-2.5 flex items-center justify-between">
+                  <div className="flex space-x-1.5">
+                    <div className="w-2.5 h-2.5 rounded-full bg-rose-400" />
+                    <div className="w-2.5 h-2.5 rounded-full bg-amber-400" />
+                    <div className="w-2.5 h-2.5 rounded-full bg-emerald-400" />
+                  </div>
+                  <span className="text-[11px] font-bold text-slate-700 flex items-center space-x-1">
+                    <Globe className="w-3.5 h-3.5 text-teal-600" />
+                    <span>Website Live View</span>
+                  </span>
+                  <div className="w-6" />
+                </div>
+                <div className="flex-1 overflow-y-auto max-h-[660px]">
+                  <WebsiteRenderer website={websiteData} isIframe />
+                </div>
+              </div>
+
+              {/* Right: Mobile App Mockup Frame */}
+              <div className="flex-shrink-0 w-full 2xl:w-auto flex flex-col items-center">
+                <div className="mb-2 px-3 py-1 rounded-xl bg-white border border-slate-200 shadow-sm flex items-center space-x-2 text-[11px] font-bold text-slate-700">
+                  <Smartphone className="w-3.5 h-3.5 text-teal-600" />
+                  <span>Native App Mockup</span>
+                  <div className="flex items-center space-x-1 bg-slate-100 p-0.5 rounded-lg text-[10px]">
+                    <button
+                      onClick={() => setAppDevice("ios")}
+                      className={`px-2 py-0.5 rounded ${appDevice === "ios" ? "bg-teal-600 text-white" : "text-slate-500"}`}
+                    >
+                      iOS
+                    </button>
+                    <button
+                      onClick={() => setAppDevice("android")}
+                      className={`px-2 py-0.5 rounded ${appDevice === "android" ? "bg-teal-600 text-white" : "text-slate-500"}`}
+                    >
+                      Android
+                    </button>
+                  </div>
+                </div>
+                <MobileAppPreview website={websiteData} deviceType={appDevice} />
+              </div>
+            </div>
+          ) : previewType === "website" ? (
             /* Website Frame */
             <div
               className={`transition-all duration-300 bg-white rounded-3xl shadow-2xl overflow-hidden border-4 border-slate-300 flex flex-col ${
