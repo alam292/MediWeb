@@ -29,6 +29,13 @@ yarn-error.log*
 # vercel
 .vercel
 
-# typescript
-*.tsbuildinfo
-next-env.d.ts
+# IDEs
+.idea/
+.vscode/
+
+# Android build outputs
+android/.gradle/
+android/app/build/
+android/build/
+*.apk
+
